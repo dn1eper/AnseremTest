@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>Продажи</title>
+
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap-table.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="Content/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="Content/Site.css" media="screen" />
+
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <script src="Scripts/jquery.inputmask.min.js"></script>
+    <script src="Scripts/popper.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/bootstrap-table.min.js"></script>
+    <script src="Scripts/bootstrap-table-ru-RU.js"></script>
+    <script src="Scripts/bootstrap-notify.min.js"></script>
+    <script src="Scripts/main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <table id="salesTable"></table>
+
+        <div class="toolbar">
+            <button id="createSaleBtn" class="btn btn-primary">Новая продажа</button>
+        </div>
+
+        <!--CREATE MODAL-->
+        <div class="modal fade" id="createSaleModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Новая продажа</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createSaleForm">
+                            <div class="form-group row">
+                                <label for="createSurName" class="col-sm-2 col-form-label">Фамилия<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="createSurName" maxlength="25" minlength="2" placeholder="Пушкин" required">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="createFirstName" class="col-sm-2 col-form-label">Имя<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="createFirstName" maxlength="25" minlength="2" placeholder="Александр" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="createPatronymic" class="col-sm-2 col-form-label">Отчество</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="createPatronymic" maxlength="25" minlength="2">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="createAddress" class="col-sm-2 col-form-label">Адрес</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" maxlength="50" id="createAddress">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="createTelephone" class="col-sm-2 col-form-label">Телефон<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="createTelephone" placeholder="+_(___)___-__-__" required pattern="[^_]{16}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" form="createSaleForm" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--EDIT MODAL-->
+        <div class="modal fade" id="editSaleModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Продажа</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editSaleForm">
+                            <div class="form-group row">
+                                <label for="editSurName" class="col-sm-2 col-form-label">Фамилия<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="editSurName" maxlength="25" minlength="2" placeholder="Пушкин" required">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="editFirstName" class="col-sm-2 col-form-label">Имя<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="editFirstName" maxlength="25" minlength="2" placeholder="Александр" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="editPatronymic" class="col-sm-2 col-form-label">Отчество</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="editPatronymic" maxlength="25" minlength="2">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="editAddress" class="col-sm-2 col-form-label">Адрес</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" maxlength="50" id="editAddress">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="editTelephone" class="col-sm-2 col-form-label">Телефон<span class="required" aria-hidden="true">*</span></label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="editTelephone" placeholder="+_(___)___-__-__" required pattern="[^_]{16}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" form="editSaleForm" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--REMOVE MODAL-->
+        <div class="modal fade" id="removeSaleModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Удаление</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="button" id="removeSaleConfirmBtn" class="btn btn-danger">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
