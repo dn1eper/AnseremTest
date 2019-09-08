@@ -47,7 +47,8 @@ function InitTable() {
                 width: 50,
                 events: {
                     'click .edit': OnEditSaleShow,
-                    'click .remove': OnRemoveSaleShow
+                    'click .remove': OnRemoveSaleShow,
+                    'click .clone': OnCloneSaleShow
                 },
                 formatter: () => [
                     '<a class="edit" href="javascript:void(0)" title="Изменить">',
@@ -55,6 +56,9 @@ function InitTable() {
                     '</a>',
                     '<a class="remove" href="javascript:void(0)" title="Удалить">',
                     '<i class="fa fa-trash"></i>',
+                    '</a>',
+                    '<a class="clone" href="javascript:void(0)" title="Клонировать">',
+                    '<i class="fa fa-clone"></i>',
                     '</a>'
                 ].join('')
             }
@@ -220,7 +224,6 @@ function OnEditSaleRequest() {
             });
         },
         error: function (x, y, z) {
-            console.debug(x.responseJSON);
             Notify('Произошла ошибка при сохранении продажи (' + z + ')', 'danger');
         },
         complete: function () {
@@ -241,7 +244,6 @@ function OnRemoveSaleRequest() {
         url: '/api/sales/' + selectedSale.SaleID,
         type: 'DELETE',
         success: function (data) {
-            console.log(data);
             Notify('Продажа успешно удалена', 'success');
             $table.bootstrapTable('remove', {
                 field: 'SaleID',
@@ -255,6 +257,26 @@ function OnRemoveSaleRequest() {
             $removeModal.modal('hide');
         }
     });
+}
+
+function OnCloneSaleShow(e, value, row, index) {
+    $('#createSaleForm')[0].reset();
+    selectedSale = row;
+    $('#createSaleName').val(row.SaleName);
+    if (row.Partner) {
+        $('#createPartner').val(row.Partner.PartnerName);
+        if (row.Partner.City)
+            $('#createCity').val(row.Partner.City.CityName);
+        if (row.Partner.Contact) {
+            $('#createPartnerContact').val(row.Partner.Contact.FullName);
+            $('#createPartnerContactTelephone').val(row.Partner.Contact.Telephone);
+        }
+    }
+    if (row.Contact) {
+        $('#createSaleContact').val(row.Contact.FullName);
+        $('#createSaleContactTelephone').val(row.Contact.Telephone);
+    }
+    $createModal.modal('show');
 }
 
 function Notify(message, type) {

@@ -1,6 +1,6 @@
 ﻿.required {
     color: red;
 }
-.edit{
+.edit, .remove {
     margin-right: 16px;
 }
