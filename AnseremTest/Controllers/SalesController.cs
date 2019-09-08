@@ -49,8 +49,40 @@ namespace AnseremTest.Controllers
                 return BadRequest();
             }
 
-            db.Entry(sale).State = EntityState.Modified;
+            if (sale.Contact != null)
+            {
+                db.Entry(sale.Contact).State = sale.Contact.ContactID == 0 ?
+                    EntityState.Added :
+                    EntityState.Modified;
+            }
+            else sale.ContactID = null;
 
+            if (sale.Partner != null)
+            {
+                if (sale.Partner.Contact != null)
+                {
+                    db.Entry(sale.Partner.Contact).State = sale.Partner.Contact.ContactID == 0 ?
+                        EntityState.Added :
+                        EntityState.Modified;
+                }
+                else sale.Partner.ContactID = null;
+
+                if (sale.Partner.City != null)
+                {
+                    db.Entry(sale.Partner.City).State = sale.Partner.City.CityID == 0 ?
+                        EntityState.Added :
+                        EntityState.Modified;
+                }
+                else sale.Partner.CityID = null;
+
+                db.Entry(sale.Partner).State = sale.Partner.PartnerID == 0 ?
+                    EntityState.Added :
+                    EntityState.Modified;
+            }
+            else sale.PartnerID = null;
+
+            db.Entry(sale).State = EntityState.Modified;
+            
             try
             {
                 db.SaveChanges();

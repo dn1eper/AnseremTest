@@ -28,7 +28,7 @@
 
         <!--CREATE MODAL-->
         <div class="modal fade" id="createSaleModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Новая продажа</h5>
@@ -39,33 +39,39 @@
                     <div class="modal-body">
                         <form id="createSaleForm">
                             <div class="form-group row">
-                                <label for="createSurName" class="col-sm-2 col-form-label">Фамилия<span class="required" aria-hidden="true">*</span></label>
+                                <label for="createSaleName" class="col-sm-2 col-form-label">Наименование<span class="required" aria-hidden="true">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="createSurName" maxlength="25" minlength="2" placeholder="Пушкин" required">
+                                    <input type="text" class="form-control" id="createSaleName" maxlength="25" minlength="2" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="createFirstName" class="col-sm-2 col-form-label">Имя<span class="required" aria-hidden="true">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="createFirstName" maxlength="25" minlength="2" placeholder="Александр" required>
+                                <label for="createPartner" class="col-sm-2 col-form-label">Клиент-организация</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="createPartner" maxlength="25" minlength="2">
+                                </div>
+                                <label for="createCity" class="col-sm-1 col-form-label">Город</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="createCity" maxlength="25" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="createPatronymic" class="col-sm-2 col-form-label">Отчество</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="createPatronymic" maxlength="25" minlength="2">
+                                <label for="createPartnerContact" class="col-sm-2 col-form-label">Контактное лицо от организации</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="createPartnerContact" maxlength="50" minlength="2">
+                                </div>
+                                <label for="createPartnerContactTelephone" class="col-sm-1 col-form-label">Телефон</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="createPartnerContactTelephone" placeholder="+_(___)___-__-__" pattern="[^_]{16}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="createAddress" class="col-sm-2 col-form-label">Адрес</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" maxlength="50" id="createAddress">
+                                <label for="createSaleContact" class="col-sm-2 col-form-label">Ответственный за продажу</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="createSaleContact" maxlength="50" minlength="2">
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="createTelephone" class="col-sm-2 col-form-label">Телефон<span class="required" aria-hidden="true">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="createTelephone" placeholder="+_(___)___-__-__" required pattern="[^_]{16}">
+                                <label for="createSaleContactTelephone" class="col-sm-1 col-form-label">Телефон</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="createSaleContactTelephone" placeholder="+_(___)___-__-__" pattern="[^_]{16}">
                                 </div>
                             </div>
                         </form>
@@ -77,12 +83,13 @@
                 </div>
             </div>
         </div>
+
         <!--EDIT MODAL-->
         <div class="modal fade" id="editSaleModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Продажа</h5>
+                        <h5 class="modal-title">Редактирование</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -90,33 +97,39 @@
                     <div class="modal-body">
                         <form id="editSaleForm">
                             <div class="form-group row">
-                                <label for="editSurName" class="col-sm-2 col-form-label">Фамилия<span class="required" aria-hidden="true">*</span></label>
+                                <label for="editSaleName" class="col-sm-2 col-form-label">Наименование<span class="required" aria-hidden="true">*</span></label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="editSurName" maxlength="25" minlength="2" placeholder="Пушкин" required">
+                                    <input type="text" class="form-control" id="editSaleName" maxlength="25" minlength="2" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="editFirstName" class="col-sm-2 col-form-label">Имя<span class="required" aria-hidden="true">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="editFirstName" maxlength="25" minlength="2" placeholder="Александр" required>
+                                <label for="editPartner" class="col-sm-2 col-form-label">Клиент-организация</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="editPartner" maxlength="25" minlength="2">
+                                </div>
+                                <label for="editCity" class="col-sm-1 col-form-label">Город</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="editCity" maxlength="25" minlength="2">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="editPatronymic" class="col-sm-2 col-form-label">Отчество</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="editPatronymic" maxlength="25" minlength="2">
+                                <label for="editPartnerContact" class="col-sm-2 col-form-label">Контактное лицо от организации</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="editPartnerContact" maxlength="50" minlength="2">
+                                </div>
+                                <label for="editPartnerContactTelephone" class="col-sm-1 col-form-label">Телефон</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="editPartnerContactTelephone" placeholder="+_(___)___-__-__" pattern="[^_]{16}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="editAddress" class="col-sm-2 col-form-label">Адрес</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" maxlength="50" id="editAddress">
+                                <label for="editSaleContact" class="col-sm-2 col-form-label">Ответственный за продажу</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="editSaleContact" maxlength="50" minlength="2">
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="editTelephone" class="col-sm-2 col-form-label">Телефон<span class="required" aria-hidden="true">*</span></label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="editTelephone" placeholder="+_(___)___-__-__" required pattern="[^_]{16}">
+                                <label for="editSaleContactTelephone" class="col-sm-1 col-form-label">Телефон</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="editSaleContactTelephone" placeholder="+_(___)___-__-__" pattern="[^_]{16}">
                                 </div>
                             </div>
                         </form>

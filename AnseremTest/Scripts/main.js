@@ -7,7 +7,7 @@ function InitTable() {
                 title: '№',
                 field: 'SaleID',
                 align: 'center',
-                width: 50,
+                width: 40,
                 sortable: true,
                 searchable: false
             },
@@ -31,18 +31,20 @@ function InitTable() {
             },
             {
                 title: 'Ответственный',
-                field: 'Contact.FullName'
+                field: 'Contact.FullName',
+                sortable: true
             },
             {
-                title: 'Город клиента-организации',
+                title: 'Город',
                 field: 'Partner.City.CityName',
+                sortable: true,
                 width: 120
             },
             {
                 title: 'Управление',
                 searchable: false,
                 align: 'center',
-                width: 60,
+                width: 50,
                 events: {
                     'click .edit': OnEditSaleShow,
                     'click .remove': OnRemoveSaleShow
@@ -76,22 +78,51 @@ function OnCreateSaleShow() {
 }
 
 function OnCreateSaleRequest() {
-    var newContact = {
-        FirstName: $('#createFirstName').val(),
-        SurName: $('#createSurName').val(),
-        Patronymic: $('#createPatronymic').val(),
-        Address: $('#createAddress').val(),
-        Telephone: {
-            Number: $('#createTelephone').val().replace(/(\(|\)|\-)/g, '')
-        }
+    var newSale = {
+        SaleName: $('#createSaleName').val()
     };
+    if ($('#createSaleContact').val()) {
+        newSale.Contact = {
+            FullName: $('#createSaleContact').val(),
+            Telephone: $('#createSaleContactTelephone').val()
+        }
+    }
+    else if ($('#createSaleContactTelephone').val()) {
+        Notify('Невозможно указать номер телефона без имени контакта', 'danger');
+        return false;
+    }
+    if ($('#createPartner').val()) {
+        newSale.Partner = {
+            PartnerName: $('#createPartner').val()
+        };
+        if ($('#createPartnerContact').val()) {
+            newSale.Partner.Contact = {
+                FullName: $('#createPartnerContact').val(),
+                Telephone: $('#createPartnerContactTelephone').val()
+            }
+        }
+        else if ($('#createPartnerContactTelephone').val()) {
+            Notify('Невозможно указать номер телефона без имени контакта', 'danger');
+            return false;
+        }
+        if ($('#createCity').val()) {
+            newSale.Partner.City = {
+                CityName: $('#createCity').val()
+            };
+        }
+    }
+    else if ($('#createCity').val() || $('#createPartnerContact').val()) {
+        Notify('Необходимо указать клиент-организация', 'danger');
+        return false;
+    }
+
     $.ajax({
         url: '/api/sales/',
         type: 'POST',
-        data: JSON.stringify(newContact),
+        data: JSON.stringify(newSale),
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            Notify('Контакт успешно сохранен', 'success');
+            Notify('Продажа успешно сохранена', 'success');
             $table.bootstrapTable('append', data);
         },
         error: function (x, y, z) {
@@ -99,43 +130,98 @@ function OnCreateSaleRequest() {
         },
         complete: function () {
             $createModal.modal('hide');
-            $('#createContactForm')[0].reset();
+            $('#createSaleForm')[0].reset();
         }
     });
     return false;
 }
 
 function OnEditSaleShow(e, value, row, index) {
+    $('#editSaleForm')[0].reset();
     selectedSale = row;
-    $('#editFirstName').val(row.FirstName);
-    $('#editSurName').val(row.SurName);
-    $('#editPatronymic').val(row.Patronymic);
-    $('#editAddress').val(row.Address);
-    $('#editTelephone').val(row.Telephone.Number);
+    $('#editSaleName').val(row.SaleName);
+    if (row.Partner) {
+        $('#editPartner').val(row.Partner.PartnerName);
+        if (row.Partner.City)
+            $('#editCity').val(row.Partner.City.CityName);
+        if (row.Partner.Contact) {
+            $('#editPartnerContact').val(row.Partner.Contact.FullName);
+            $('#editPartnerContactTelephone').val(row.Partner.Contact.Telephone);
+        }
+    }
+    if (row.Contact) {
+        $('#editSaleContact').val(row.Contact.FullName);
+        $('#editSaleContactTelephone').val(row.Contact.Telephone);
+    }
     $editModal.modal('show');
 }
 
 function OnEditSaleRequest() {
-    selectedSale.FirstName = $('#editFirstName').val();
-    selectedSale.SurName = $('#editSurName').val();
-    selectedSale.Patronymic = $('#editPatronymic').val();
-    selectedSale.Address = $('#editAddress').val();
-    selectedSale.Telephone.Number = $('#editTelephone').val().replace(/(\(|\)|\-)/g, '');
+    selectedSale.SaleName = $('#editSaleName').val()
+
+    if ($('#editSaleContact').val()) {
+        if (selectedSale.Contact == null) selectedSale.Contact = {};
+
+        selectedSale.Contact.FullName = $('#editSaleContact').val();
+        selectedSale.Contact.Telephone = $('#editSaleContactTelephone').val().replace(/(\(|\)|\-)/g, '');
+    }
+    else if ($('#editSaleContactTelephone').val()) {
+        Notify('Невозможно указать номер телефона без имени контакта', 'danger');
+        return false;
+    }
+    else {
+        selectedSale.Contact = null;
+    }
+    if ($('#editPartner').val()) {
+        if (selectedSale.Partner == null) selectedSale.Partner = {};
+
+        selectedSale.Partner.PartnerName = $('#editPartner').val();
+
+        if ($('#editPartnerContact').val()) {
+            if (selectedSale.Partner.Contact == null) selectedSale.Partner.Contact = {};
+
+            selectedSale.Partner.Contact.FullName = $('#editPartnerContact').val();
+            selectedSale.Partner.Contact.Telephone = $('#editPartnerContactTelephone').val().replace(/(\(|\)|\-)/g, '');
+        }
+        else if ($('#editPartnerContactTelephone').val()) {
+            Notify('Невозможно указать номер телефона без имени контакта', 'danger');
+            return false;
+        }
+        else {
+            selectedSale.Partner.Contact = null;
+        }
+        if ($('#editCity').val()) {
+            if (selectedSale.Partner.City == null) selectedSale.Partner.City = {};
+
+            selectedSale.Partner.City.CityName = $('#editCity').val();
+        }
+        else {
+            selectedSale.Partner.City = null;
+        }
+    }
+    else if ($('#editCity').val() || $('#editPartnerContact').val()) {
+        Notify('Необходимо указать клиент-организация', 'danger');
+        return false;
+    }
+    else {
+        selectedSale.Partner = null;
+    }
 
     $.ajax({
-        url: '/api/sales/' + selectedSale.ContactID,
+        url: '/api/sales/' + selectedSale.SaleID,
         type: 'PUT',
         data: JSON.stringify(selectedSale),
         contentType: "application/json;charset=utf-8",
         success: function (data) {
-            Notify('Контакт успешно сохранен', 'success');
+            Notify('Продажа успешно сохранена', 'success');
             $table.bootstrapTable('updateByUniqueId', {
                 id: selectedSale.$id,
                 row: selectedSale
             });
         },
         error: function (x, y, z) {
-            Notify('Произошла ошибка при сохранении контакта (' + z + ')', 'danger');
+            console.debug(x.responseJSON);
+            Notify('Произошла ошибка при сохранении продажи (' + z + ')', 'danger');
         },
         complete: function () {
             $editModal.modal('hide');
@@ -179,7 +265,8 @@ function Notify(message, type) {
             placement: {
                 from: "top",
                 align: "center"
-            }
+            },
+            z_index: 2031
         });
 }
 
@@ -195,6 +282,6 @@ $(document).ready(function () {
     $('#createSaleForm').submit(OnCreateSaleRequest);
     $('#editSaleForm').submit(OnEditSaleRequest);
     $('#removeSaleConfirmBtn').click(OnRemoveSaleRequest);
-    $("#createTelephone, #editTelephone").inputmask({ mask: "+9(999)999-99-99" });
+    $("#createSaleContactTelephone, #createPartnerContactTelephone, #editSaleContactTelephone, #editPartnerContactTelephone").inputmask({ mask: "+9(999)999-99-99" });
 });
 
